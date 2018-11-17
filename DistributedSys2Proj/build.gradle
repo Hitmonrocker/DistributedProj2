@@ -27,6 +27,10 @@ targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter")
+    compile("org.springframework:spring-web")
+    compile("com.fasterxml.jackson.core:jackson-databind")
+    compile("com.google.code.gson:gson:2.8.5")
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
