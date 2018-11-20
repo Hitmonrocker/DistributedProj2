@@ -28,32 +28,34 @@ public class RequestController {
          Request r = book.getRequest(name);
          if(r == null)
          {
+
              throw new IllegalArgumentException("The 'User' parameter must exist and not be empty");
          }
          return r;
     }
     @RequestMapping(method=RequestMethod.POST,value="/restaurant")
-    public String addressList(@Valid @RequestBody Request address){
+    public ResponseEntity<?> addressList(@Valid @RequestBody Request address){
 
         if(address!=null) {
            RestTemplate restTemplate = new RestTemplate();
            String addr = restTemplate.getForObject(formStringRequestGeo(address), String.class);
             if(addr == null){
-                throw new IllegalArgumentException("The geocode API is down");
+                return new ResponseEntity<>("Api is down", HttpStatus.INTERNAL_SERVER_ERROR);
+
 
             }
            Request temp = parseRet(address, addr);
             RestTemplate restTemplate2 = new RestTemplate();
            Info ret = restTemplate2.getForObject(formStringRequestZom(address),Info.class);
            if(ret == null){
-               throw new IllegalArgumentException("The restaurant API is down");
+               return new ResponseEntity<>("Api is down", HttpStatus.INTERNAL_SERVER_ERROR);
            }
            System.out.println(ret.toString());
            temp.setResturants(ret);
            book.addRequest(temp);
-            return "The request was processed";
+            return new ResponseEntity<>("request is accepted", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        throw new IllegalArgumentException("The information entered must not be null or empty");
+        return new ResponseEntity<>("Api is down", HttpStatus.BAD_REQUEST);
     }
 
 
