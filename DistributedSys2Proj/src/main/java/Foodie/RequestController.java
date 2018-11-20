@@ -36,7 +36,7 @@ public class RequestController {
     @RequestMapping(method=RequestMethod.POST,value="/restaurant")
     public ResponseEntity<?> addressList(@Valid @RequestBody Request address){
 
-        if(address!=null) {
+        if(address.getState()!=null&& address.getCity()!=null&&address.getStreet()!=null) {
            RestTemplate restTemplate = new RestTemplate();
            String addr = restTemplate.getForObject(formStringRequestGeo(address), String.class);
             if(addr == null){
@@ -53,7 +53,7 @@ public class RequestController {
            System.out.println(ret.toString());
            temp.setResturants(ret);
            book.addRequest(temp);
-            return new ResponseEntity<>("request is accepted", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("request is accepted", HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>("Api is down", HttpStatus.BAD_REQUEST);
     }
