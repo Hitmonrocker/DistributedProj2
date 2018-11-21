@@ -46,9 +46,9 @@ public class restaurant {
     }
     @Override
     public String toString() {
-        return "name=" + name + "\n"+
-                ", cuisines=" +cuisines  +"\n"+
-                ", locations="  +loca+"\n"+
+        return "name="+ name + ",\n"+
+                ", cuisines=" +cuisines  +",\n"+
+                ", locations="  +loca+".\n"+
                 ", Rating="+rating;
     }
 }
