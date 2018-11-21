@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -24,38 +25,38 @@ public class RequestController {
     private Booklet book = new Booklet();
 
     @RequestMapping("/restaurant")
-    public Request ret(@Valid@RequestParam(value="User", defaultValue="Vince") String name) {
+    public ResponseEntity<?> ret(@Valid@RequestParam(value="User", defaultValue="Vince") String name) {
          Request r = book.getRequest(name);
          if(r == null)
          {
 
              throw new IllegalArgumentException("The 'User' parameter must exist and not be empty");
          }
-         return r;
+         return new ResponseEntity<>(r.toString(),HttpStatus.ACCEPTED);
     }
     @RequestMapping(method=RequestMethod.POST,value="/restaurant")
-    public ResponseEntity<?> addressList(@Valid @RequestBody Request address){
+    public ResponseEntity<?> addressList(@Valid @RequestBody Request address, HttpServletResponse response){
 
-        if(address.getState()!=null&& address.getCity()!=null&&address.getStreet()!=null) {
+        if(address.getState()!=""&& address.getCity()!=""&&address.getStreet()!="") {
            RestTemplate restTemplate = new RestTemplate();
            String addr = restTemplate.getForObject(formStringRequestGeo(address), String.class);
             if(addr == null){
-                return new ResponseEntity<>("Api is down", HttpStatus.INTERNAL_SERVER_ERROR);
-
+                return new ResponseEntity<>("Geocode Api is down"+HttpStatus.INTERNAL_SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR);
 
             }
            Request temp = parseRet(address, addr);
             RestTemplate restTemplate2 = new RestTemplate();
            Info ret = restTemplate2.getForObject(formStringRequestZom(address),Info.class);
            if(ret == null){
-               return new ResponseEntity<>("Api is down", HttpStatus.INTERNAL_SERVER_ERROR);
+               return new ResponseEntity<>("Zamato Api is down"+HttpStatus.INTERNAL_SERVER_ERROR,HttpStatus.INTERNAL_SERVER_ERROR);
+
            }
            System.out.println(ret.toString());
            temp.setResturants(ret);
-           book.addRequest(temp);
-            return new ResponseEntity<>("request is accepted", HttpStatus.ACCEPTED);
+          // book.addRequest(temp);
+            return new ResponseEntity<>(((Request)temp).toString(), HttpStatus.ACCEPTED);
         }
-        return new ResponseEntity<>("Api is down", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("No valid address given" +HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST);
     }
 
 

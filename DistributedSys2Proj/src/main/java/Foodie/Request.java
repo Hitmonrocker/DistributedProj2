@@ -1,6 +1,7 @@
 package Foodie;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.http.ResponseEntity;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Request {
@@ -61,5 +62,9 @@ public class Request {
 
     public String getState() {
         return State;
+    }
+    @Override
+    public String toString(){
+        return "Id = "+id+"\n"+"Street = "+Street+"\n"+"City = "+City+"\n"+"State = "+State+"\n"+"Restaurants = "+Resturants.toString()+"\n";
     }
 }

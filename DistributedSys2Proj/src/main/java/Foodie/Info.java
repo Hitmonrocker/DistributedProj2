@@ -16,6 +16,12 @@ public class Info {
             this.rest = rest;
         }
     public String toString() {
-        return "Infomation = "+rest;
+        StringBuilder Sand = new StringBuilder();
+                for(int x =0;x<rest.size();x++)
+                {
+                    Sand.append(rest.get(x).toString());
+                    Sand.append("\n");
+                }
+            return Sand.toString();
     }
 }

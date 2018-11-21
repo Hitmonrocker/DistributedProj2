@@ -19,6 +19,10 @@ public class nearby_restaurants {
         {
             this.restaurant=restaurant;
         }
-
+        @Override
+        public String toString()
+        {
+            return restaurant.toString();
+        }
 
 }
