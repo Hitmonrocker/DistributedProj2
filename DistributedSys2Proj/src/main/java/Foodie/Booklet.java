@@ -8,6 +8,16 @@ public class Booklet {
 
 
     public void addRequest(Request req) {
+        int remove=-1;
+        for (int i = 0;i<addressList.size();i++) {
+            if(req.getId().compareToIgnoreCase(addressList.get(i).getId())==0){
+                remove = i;
+            }
+
+        }
+        if(remove !=-1) {
+            addressList.remove(remove);
+        }
         addressList.add(req);
     }
     public Request getRequest(String s){
@@ -16,7 +26,6 @@ public class Booklet {
             if(s.compareToIgnoreCase(addressList.get(i).getId())==0){
                 return addressList.get(i);
             }
-            
         }
         return null;
     }
